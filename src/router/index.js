@@ -1,6 +1,9 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import EmployeeComponent from '../components/EmployeeComponent.vue'
 import EditEmployee from '../components/EditEmployee.vue'
+
+import JobComponent from '../components/JobComponent.vue'
+import EditJob from '../components/EditJob.vue'
 import HomePage from '../components/HomePage.vue'
 
 const routes = [
@@ -10,9 +13,29 @@ const routes = [
     component : EmployeeComponent
   },
   {
-    path : '/editEmployee',
+    path : '/editEmployee/:id',
     name : 'EditEmployee',
     component : EditEmployee
+  },
+  {
+    path : '/newEmployee',
+    name : 'NewEmployee',
+    component : EditEmployee
+  },
+  {
+    path : '/jobs',
+    name : 'Jobs',
+    component : JobComponent
+  },
+  {
+    path : '/editJob/:id',
+    name : 'EditJob',
+    component : EditJob
+  },
+  {
+    path : '/newJob',
+    name : 'NewJob',
+    component : EditJob
   },
   {
     path : '/',

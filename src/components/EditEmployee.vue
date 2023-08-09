@@ -2,50 +2,138 @@
   <div>
     <h2>Edit Employee</h2>
     <form @submit.prevent="saveChanges">
-      <label for="name">Name:</label>
-      <input v-model="editedEmployee.name" type="text" id="name" />
+      <div class="input-group mb-3">
+        <div class="input-group-prepend">
+          <span class="input-group-text" id="basic-addon1">Name</span>
+        </div>
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Name"
+          aria-label="Name"
+          aria-describedby="basic-addon1"
+          v-model="editedEmployee.firstName"
+        />
+      </div>
 
-      <label for="surname">Surname:</label>
-      <input v-model="editedEmployee.surname" type="text" id="surname" />
+      <div class="input-group mb-3">
+        <div class="input-group-prepend">
+          <span class="input-group-text" id="basic-addon1">Surname</span>
+        </div>
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Surname"
+          aria-label="Surname"
+          aria-describedby="basic-addon1"
+          v-model="editedEmployee.surname"
+        />
+      </div>
 
-      <label for="phoneNumber">Phone Number:</label>
-      <input v-model="editedEmployee.phoneNumber" type="text" id="phoneNumber" />
+      <div class="input-group mb-3">
+        <div class="input-group-prepend">
+          <span class="input-group-text" id="basic-addon1">Phone Number</span>
+        </div>
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Phone Number"
+          aria-label="Phone Number"
+          aria-describedby="basic-addon1"
+          v-model="editedEmployee.phoneNumber"
+        />
+      </div>
 
-      <label for="isManager">Is Manager:</label>
-      <input v-model="editedEmployee.isManager" type="checkbox" id="isManager" />
+      <div class="input-group mb-3">
+        <div class="input-group-prepend">
+          <span class="input-group-text" id="basic-addon1">Is a manager?</span>
+        </div>
+        <div class="input-group-text">
+          <input type="checkbox" v-model="editedEmployee.isManager" />
+        </div>
+      </div>
 
-      <label for="job">Job:</label>
-      <input v-model="editedEmployee.job" type="text" id="job" />
-
-      <button type="submit">Save Changes</button>
+      <div class="input-group mb-3">
+        <div class="input-group-prepend">
+          <span class="input-group-text" id="basic-addon1">Job Name</span>
+        </div>
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Job Name"
+          aria-label="Job Name"
+          aria-describedby="basic-addon1"
+          v-model="editedJob.jobName"
+        />
+      </div>
+      <button type="submit" v-on:click="saveEditedEmployee()">
+        Save Changes
+      </button>
     </form>
   </div>
 </template>
 
 <script>
-import { ref, onMounted } from 'vue';
+import EmployeeService from "../services/EmployeeService";
+import Employee from "@/dto/Employee";
 
 export default {
-  props: {
-    record: Object
-  },
-  setup(props) {
-    const editedEmployee = ref({ ...props.record });
-
-    const saveChanges = () => {
-      // Here, you can perform actions like saving changes to the backend
-      // For this example, we'll just log the changes
-      console.log('Edited Employee:', editedEmployee.value);
-    };
-
-    onMounted(() => {
-      // You can perform additional setup here if needed
-    });
-
+  components: {},
+  name: "EditEmployee",
+  data() {
     return {
-      editedEmployee,
-      saveChanges
+      editedEmployee: {},
+      editedJob: {},
     };
-  }
+  },
+  methods: {
+    getEmployee() {
+      if (this.$route.params.id == null) {
+        return;
+      }
+      EmployeeService.getEmployee(this.$route.params.id)
+        .then((response) => {
+          this.editedEmployee = response.data;
+          this.editedJob = this.editedEmployee.job;
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
+    saveEditedEmployee() {
+      if (this.editedEmployee.id != null) {
+        EmployeeService.saveEditedEmployee(this.editedEmployee, this.editedJob)
+          .then((response) => {
+            console.log(response);
+            this.$router.push('/employees')
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+      } else {
+        let dto = new Employee(
+          this.editedEmployee.firstName,
+          this.editedEmployee.surname,
+          this.editedEmployee.phoneNumber,
+          this.editedEmployee.isManager,
+          null,
+          null
+        );
+        EmployeeService.createEmployee(dto)
+          .then((response) => {
+            console.log(response);
+            this.$router.push('/employees')
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+      }
+    },
+  },
+  created() {
+    this.getEmployee();
+  },
 };
 </script>
+
+<style></style>
