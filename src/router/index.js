@@ -8,6 +8,9 @@ import EditJob from '../components/EditJob.vue'
 import CommentComponent from '../components/CommentComponent.vue'
 import EditComment from '../components/EditComment.vue'
 
+import ProjectComponent from '../components/ProjectComponent.vue'
+import EditProject from '../components/EditProject.vue'
+
 import HomePage from '../components/HomePage.vue'
 
 const routes = [
@@ -55,6 +58,21 @@ const routes = [
     path : '/newComment',
     name : 'NewComment',
     component : EditComment
+  },
+  {
+    path : '/projects',
+    name : 'Projects',
+    component : ProjectComponent
+  },
+  {
+    path : '/editProjects/:id',
+    name : 'EditProject',
+    component : EditProject
+  },
+  {
+    path : '/newProject',
+    name : 'NewProject',
+    component : EditProject
   },
   {
     path : '/',
