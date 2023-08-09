@@ -12,6 +12,7 @@
           <th>Comment Id</th>
           <th>Comment Name</th>
           <th>Comment Text</th>
+          <th>Employee</th>
         </tr>
       </thead>
       <tbody>
@@ -19,6 +20,7 @@
           <td>{{ comment.id }}</td>
           <td>{{ comment.commentName }}</td>
           <td>{{ comment.commentText }}</td>
+          <td>{{ comment.employee.surname + ', ' + comment.employee.firstName }}</td>
           <td>
             <router-link
               :to="{ name: 'EditComment', params: { id: comment.id } }"
@@ -40,7 +42,7 @@ import CommentService from "../services/CommentService";
 
 export default {
   components: {},
-  name: "EmployeeComponent",
+  name: "CommentComponent",
   data() {
     return {
       comments: [],
@@ -54,8 +56,7 @@ export default {
     },
     deleteComment(id) {
       CommentService.deleteComment(id)
-        .then((response) => {
-          console.log(response);
+        .then(() => {
           this.getComments();
         })
         .catch(function (error) {

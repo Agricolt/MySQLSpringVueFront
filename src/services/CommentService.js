@@ -11,12 +11,12 @@ class CommentService{
     }
 
     getComment(id){
-        let comment = axios.get(COMMENT_API_BASE_URL + '/' + id);
+        let comment = axios.get(COMMENT_API_BASE_URL + '/' + id );
         return comment;
     }
 
-    saveEditedComment(comment) {
-        let commentDto = new Comment(comment.commentName, comment.commentText, comment.employee.id)
+    saveEditedComment(comment, selectedEmployee) {
+        let commentDto = new Comment(comment.commentName, comment.commentText, selectedEmployee.id)
         return axios.put(COMMENT_API_BASE_URL + '/' + comment.id, commentDto);
     }
 
@@ -24,8 +24,9 @@ class CommentService{
         return axios.delete(COMMENT_API_BASE_URL + '/' + id);
     }
 
-    createComment(comment) {
-        return axios.post(COMMENT_API_BASE_URL, comment);
+    createComment(comment, selectedEmployee) {
+        let commentDto = new Comment(comment.commentName, comment.commentText, selectedEmployee.id)
+        return axios.post(COMMENT_API_BASE_URL, commentDto);
     }
 }
 
