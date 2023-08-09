@@ -26,7 +26,7 @@
           <td>
             <router-link
               :to="{ name: 'EditProject', params: { id: project.id } }"
-              >Edit</router-link
+              >View Related / Edit</router-link
             >
             <router-view />
           </td>

@@ -34,7 +34,7 @@
           <td>
             <router-link
               :to="{ name: 'EditEmployee', params: { id: employee.id } }"
-              >Edit</router-link
+              >View Related / Edit</router-link
             >
             <router-view />
           </td>

@@ -43,24 +43,25 @@
           v-model="editedProject.endDate"
         />
       </div>
-
-      <button type="submit" v-on:click="saveEditedProject()">
+      <button class="save" type="submit" v-on:click="saveEditedProject()">
         Save Changes
       </button>
     </form>
+    <employee-under-project-component :projectId="this.$route.params.id"></employee-under-project-component>
   </div>
 </template>
 
 <script>
 import ProjectService from "../services/ProjectService";
-//import EmployeeService from "../services/EmployeeService";
+import EmployeeUnderProjectComponent from './EmployeeUnderProjectComponent.vue';
 
 export default {
-  components: {},
+  components: {EmployeeUnderProjectComponent},
   name: "EditProject",
   data() {
     return {
-      editedProject: {}
+      editedProject: {},
+      employees : [],
     };
   },
   methods: {
@@ -104,4 +105,10 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+
+.save {
+  margin-bottom: 100px;
+}
+
+</style>

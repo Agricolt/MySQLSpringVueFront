@@ -41,6 +41,7 @@
 import CommentService from "../services/CommentService";
 
 export default {
+  props : ['employeeId'],
   components: {},
   name: "CommentComponent",
   data() {
@@ -50,9 +51,15 @@ export default {
   },
   methods: {
     getComments() {
-      CommentService.getComments().then((response) => {
-        this.comments = response.data;
-      });
+      if (this.employeeId != null) {
+        CommentService.getEmployeeComments(this.employeeId).then((response) => {
+          this.comments = response.data;
+        });
+      } else {
+        CommentService.getComments().then((response) => {
+          this.comments = response.data;
+        });
+      }
     },
     deleteComment(id) {
       CommentService.deleteComment(id)

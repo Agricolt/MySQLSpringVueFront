@@ -91,10 +91,11 @@
         </div>
       </div>
 
-      <button type="submit" v-on:click="saveEditedEmployee()">
+      <button class="save" type="submit" v-on:click="saveEditedEmployee()">
         Save Changes
       </button>
     </form>
+        <comment-component v-if="this.$route.params.id != null" :employeeId="this.$route.params.id"></comment-component>
   </div>
 </template>
 
@@ -102,9 +103,10 @@
 import EmployeeService from "../services/EmployeeService";
 import JobService from "../services/JobService";
 import Employee from "@/dto/Employee";
+import CommentComponent from './CommentComponent.vue';
 
 export default {
-  components: {},
+  components: {CommentComponent},
   name: "EditEmployee",
   data() {
     return {
@@ -184,4 +186,10 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+
+.save {
+  margin-bottom: 100px;
+}
+
+</style>

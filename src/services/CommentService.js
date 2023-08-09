@@ -15,6 +15,11 @@ class CommentService{
         return comment;
     }
 
+    getEmployeeComments(employeeId){
+        let comment = axios.get(COMMENT_API_BASE_URL + '/employee/' + employeeId );
+        return comment;
+    }
+
     saveEditedComment(comment, selectedEmployee) {
         let commentDto = new Comment(comment.commentName, comment.commentText, selectedEmployee.id)
         return axios.put(COMMENT_API_BASE_URL + '/' + comment.id, commentDto);

@@ -15,6 +15,16 @@ class EmployeeService{
         return employee;
     }
 
+    getEmployeesByProjectId(projectId) {
+        let employee = axios.get(EMPLOYEE_API_BASE_URL + '/project/' + projectId);
+        return employee;
+    }
+
+    getEmployeesWithoutThisProject(projectId) {
+        let employee = axios.get(EMPLOYEE_API_BASE_URL + '/projectCandidates/' + projectId);
+        return employee;
+    }
+
     saveEditedEmployee(employee, selectedJob, selectedManager) {
         let employeeDto = new Employee(employee.firstName, employee.surname, employee.phoneNumber, employee.isManager, selectedJob.id, selectedManager.id);
         return axios.put(EMPLOYEE_API_BASE_URL + '/' + employee.id, employeeDto);

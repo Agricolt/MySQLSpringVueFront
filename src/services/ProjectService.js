@@ -28,6 +28,14 @@ class ProjectService{
         let projectDto = new Project(project.projectName, new Date(project.startDate).toISOString(), new Date(project.endDate).toISOString())
         return axios.post(PROJECT_API_BASE_URL, projectDto);
     }
+
+    assignEmployeeToProject(projectId, employeeId){
+        return axios.post(PROJECT_API_BASE_URL + '/' + projectId + '/assign-employee/' + employeeId);
+    }
+
+    removeEmployeeFromProject(projectId, employeeId){
+        return axios.delete(PROJECT_API_BASE_URL + '/' + projectId + '/remove-employee/' + employeeId);
+    }
 }
 
 export default new ProjectService();
