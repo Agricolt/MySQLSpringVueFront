@@ -46,15 +46,6 @@
 
       <div class="input-group mb-3">
         <div class="input-group-prepend">
-          <span class="input-group-text" id="basic-addon1">Is a manager?</span>
-        </div>
-        <div class="input-group-text">
-          <input type="checkbox" v-model="editedEmployee.isManager" />
-        </div>
-      </div>
-
-      <div class="input-group mb-3">
-        <div class="input-group-prepend">
           <span class="input-group-text" id="basic-addon1">Job Name</span>
         </div>
         <input
@@ -66,6 +57,27 @@
           v-model="editedJob.jobName"
         />
       </div>
+
+      <div class="input-group mb-3">
+        <div class="input-group-prepend">
+          <span class="input-group-text" id="basic-addon1">Manager</span>
+        </div>
+        <div class="form-group col-md-4">
+          <select id="inputState" class="form-control" ref="selection" v-model="selected">
+            <option disabled value="">Choose...</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="input-group mb-3">
+        <div class="input-group-prepend">
+          <span class="input-group-text" id="basic-addon1">Is a manager?</span>
+        </div>
+        <div class="input-group-text">
+          <input type="checkbox" v-model="editedEmployee.isManager" />
+        </div>
+      </div>
+
       <button type="submit" v-on:click="saveEditedEmployee()">
         Save Changes
       </button>
@@ -82,8 +94,10 @@ export default {
   name: "EditEmployee",
   data() {
     return {
+      managers : [],
       editedEmployee: {},
       editedJob: {},
+      selected : ''
     };
   },
   methods: {
@@ -103,9 +117,8 @@ export default {
     saveEditedEmployee() {
       if (this.editedEmployee.id != null) {
         EmployeeService.saveEditedEmployee(this.editedEmployee, this.editedJob)
-          .then((response) => {
-            console.log(response);
-            this.$router.push('/employees')
+          .then(() => {
+            this.$router.push("/employees");
           })
           .catch(function (error) {
             console.log(error);
@@ -122,16 +135,33 @@ export default {
         EmployeeService.createEmployee(dto)
           .then((response) => {
             console.log(response);
-            this.$router.push('/employees')
+            this.$router.push("/employees");
           })
           .catch(function (error) {
             console.log(error);
           });
       }
+    },    
+    getManagers() {
+      EmployeeService.getManagers()
+        .then((response) => {
+          this.managers = response.data;
+          const selection = this.$refs.selection;
+          for (let index = 0; index < this.managers.length; index++) {
+            let newOption = document.createElement("option");
+            newOption.value = this.managers[index].id;
+            newOption.append(this.managers[index].surname + ', ' + this.managers[index].firstName);
+            selection.append(newOption);
+          }
+        })
+        .catch((e) => {
+          console.log(e);
+        });
     },
   },
   created() {
     this.getEmployee();
+    this.getManagers();
   },
 };
 </script>

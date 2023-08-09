@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2>Edit Employee</h2>
+    <h2>Edit Job</h2>
     <form @submit.prevent="saveChanges">
       <div class="input-group mb-3">
         <div class="input-group-prepend">
