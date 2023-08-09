@@ -27,8 +27,10 @@
           <td>
             <input type="checkbox" :checked="employee.isManager" disabled />
           </td>
-          <td>{{ employee.job.jobName }}</td>
-          <td>{{ employee.managingEmployee }}</td>
+          <td v-if="employee.job != null">{{ employee.job.jobName}}</td>
+          <td v-else>None</td>
+          <td v-if="employee.managingEmployee != null">{{ employee.managingEmployee.surname + ', ' +  employee.managingEmployee.firstName}}</td>
+          <td v-else>None</td>
           <td>
             <router-link
               :to="{ name: 'EditEmployee', params: { id: employee.id } }"
@@ -59,22 +61,12 @@ export default {
   methods: {
     getEmployees() {
       EmployeeService.getEmployees().then((response) => {
-        console.log(response.data);
-        for (let index = 0; index < response.data.length; index++) {
-          if (response.data[index].managingEmployee === null) {
-            response.data[index].managingEmployee = "None";
-          }
-          if (response.data[index].job === null) {
-            response.data[index].job = { jobName: "None" };
-          }
-        }
         this.employees = response.data;
       });
     },
     deleteEmployee(id) {
       EmployeeService.deleteEmployee(id)
-        .then((response) => {
-          console.log(response);
+        .then(() => {
           this.getEmployees();
         })
         .catch(function (error) {

@@ -48,14 +48,19 @@
         <div class="input-group-prepend">
           <span class="input-group-text" id="basic-addon1">Job Name</span>
         </div>
-        <input
-          type="text"
-          class="form-control"
-          placeholder="Job Name"
-          aria-label="Job Name"
-          aria-describedby="basic-addon1"
-          v-model="editedJob.jobName"
-        />
+        <div class="form-group col-md-4">
+          <select
+            v-model="selectedJob"
+            id="inputState"
+            class="form-control"
+            ref="selection"
+          >
+            <option disabled value="">Choose...</option>
+            <option v-for="job in jobs" :key="job.id" :value="job">
+              {{ job.jobName }}
+            </option>
+          </select>
+        </div>
       </div>
 
       <div class="input-group mb-3">
@@ -63,8 +68,16 @@
           <span class="input-group-text" id="basic-addon1">Manager</span>
         </div>
         <div class="form-group col-md-4">
-          <select id="inputState" class="form-control" ref="selection" v-model="selected">
+          <select
+            v-model="selectedManager"
+            id="inputState"
+            class="form-control"
+            ref="selection"
+          >
             <option disabled value="">Choose...</option>
+            <option v-for="manager in managers" :key="manager.id" :value="manager">
+              {{ manager.surname + ", " + manager.firstName }}
+            </option>
           </select>
         </div>
       </div>
@@ -87,6 +100,7 @@
 
 <script>
 import EmployeeService from "../services/EmployeeService";
+import JobService from "../services/JobService";
 import Employee from "@/dto/Employee";
 
 export default {
@@ -94,10 +108,11 @@ export default {
   name: "EditEmployee",
   data() {
     return {
-      managers : [],
+      managers: [],
+      jobs: [],
       editedEmployee: {},
-      editedJob: {},
-      selected : ''
+      selectedManager: {},
+      selectedJob : {}
     };
   },
   methods: {
@@ -108,7 +123,8 @@ export default {
       EmployeeService.getEmployee(this.$route.params.id)
         .then((response) => {
           this.editedEmployee = response.data;
-          this.editedJob = this.editedEmployee.job;
+          this.selectedJob = this.jobs.find((element) => element.id === this?.editedEmployee?.job?.id)
+          this.selectedManager = this.managers.find((element) => element.id === this?.editedEmployee?.managingEmployee?.id)
         })
         .catch((e) => {
           console.log(e);
@@ -116,7 +132,7 @@ export default {
     },
     saveEditedEmployee() {
       if (this.editedEmployee.id != null) {
-        EmployeeService.saveEditedEmployee(this.editedEmployee, this.editedJob)
+        EmployeeService.saveEditedEmployee(this.editedEmployee, this.selectedJob, this.selectedManager)
           .then(() => {
             this.$router.push("/employees");
           })
@@ -129,30 +145,31 @@ export default {
           this.editedEmployee.surname,
           this.editedEmployee.phoneNumber,
           this.editedEmployee.isManager,
-          null,
-          null
+          this.selectedJob.id,
+          this.selectedManager.id
         );
         EmployeeService.createEmployee(dto)
-          .then((response) => {
-            console.log(response);
+          .then(() => {
             this.$router.push("/employees");
           })
           .catch(function (error) {
             console.log(error);
           });
       }
-    },    
+    },
     getManagers() {
       EmployeeService.getManagers()
         .then((response) => {
           this.managers = response.data;
-          const selection = this.$refs.selection;
-          for (let index = 0; index < this.managers.length; index++) {
-            let newOption = document.createElement("option");
-            newOption.value = this.managers[index].id;
-            newOption.append(this.managers[index].surname + ', ' + this.managers[index].firstName);
-            selection.append(newOption);
-          }
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
+    getJobs() {
+      JobService.getJobs()
+        .then((response) => {
+          this.jobs = response.data;
         })
         .catch((e) => {
           console.log(e);
@@ -160,8 +177,9 @@ export default {
     },
   },
   created() {
-    this.getEmployee();
     this.getManagers();
+    this.getJobs();
+    this.getEmployee();
   },
 };
 </script>

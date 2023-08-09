@@ -15,8 +15,8 @@ class EmployeeService{
         return employee;
     }
 
-    saveEditedEmployee(employee, job) {
-        let employeeDto = new Employee(employee.firstName, employee.surname, employee.phoneNumber, employee.isManager, job.id, employee.managerId);
+    saveEditedEmployee(employee, selectedJob, selectedManager) {
+        let employeeDto = new Employee(employee.firstName, employee.surname, employee.phoneNumber, employee.isManager, selectedJob.id, selectedManager.id);
         return axios.put(EMPLOYEE_API_BASE_URL + '/' + employee.id, employeeDto);
     }
 
