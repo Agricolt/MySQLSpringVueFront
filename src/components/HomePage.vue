@@ -4,7 +4,6 @@ import JobComponent from '../components/JobComponent.vue'
 import ProjectComponent from '../components/ProjectComponent.vue'
 </script>
 
-
 <template>
   <div>
     <apexchart

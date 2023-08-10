@@ -6,16 +6,19 @@
       >
     </div>
     <h1 class="text-center">Employees List</h1>
-    <table class="table table-striped">
-      <thead>
+    <table class="table table-striped table-bordered">
+      <thead class="thead-light">
         <tr>
           <th>Employee Id</th>
           <th>Employee First Name</th>
           <th>Employee Surname</th>
           <th v-if="!this.isShortened">Employee Phone Number</th>
           <th v-if="!this.isShortened">Is a manager?</th>
-          <th v-if="!this.isShortened">Job Name</th>
-          <th v-if="!this.isShortened">Managing employee</th>
+          <div v-if="!this.isShortened">
+          <th v-if="!this.isShortened">Job Name,</th>
+          <th class="managing" v-if="!this.isShortened">Managing employee</th>
+          </div>
+          <th v-if="!this.isShortened">Actions</th>
         </tr>
       </thead>
       <tbody>
@@ -28,10 +31,10 @@
             <input type="checkbox" :checked="employee.isManager" disabled />
           </td>
           <div v-if="!this.isShortened">
-          <td v-if="employee.job != null &&  !this.isShortened">{{ employee.job.jobName}}</td>
+          <td v-if="employee.job != null && !this.isShortened">{{ employee.job.jobName}}, </td>
           <td v-else>None</td>
-          <td v-if="employee.managingEmployee != null">{{ employee.managingEmployee.surname + ', ' +  employee.managingEmployee.firstName}}</td>
-          <td v-else>None</td>
+          <td v-if="employee.managingEmployee != null" class="managing"> {{ employee.managingEmployee.surname + ', ' +  employee.managingEmployee.firstName}}</td>
+          <td v-else class="managing">None</td>
           </div>
           <td v-if="!this.isShortened">
             <router-link
@@ -39,8 +42,6 @@
               >View Related / Edit</router-link
             >
             <router-view />
-          </td>
-          <td v-if="!this.isShortened">
             <a href="#" class="link-danger" v-on:click="deleteEmployee(employee.id)">Delete</a>
           </td>
         </tr>
@@ -82,3 +83,9 @@ export default {
   },
 };
 </script>
+
+<style>
+.link-danger {
+  margin-left: 10px;
+}
+</style>
