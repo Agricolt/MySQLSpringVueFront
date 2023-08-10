@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="mb-4 text-left">
-      <router-link to="/newJob" class="btn btn-secondary"
+      <router-link v-if="!this.isShortened" to="/newJob" class="btn btn-secondary"
         >New Job</router-link
       >
     </div>
@@ -20,13 +20,13 @@
           <td>{{ job.jobName }}</td>
           <td>{{ job.salary }}</td>
           <td>
-            <router-link
+            <router-link  v-if="!this.isShortened"
               :to="{ name: 'EditJob', params: { id: job.id } }"
               >Edit</router-link
             >
             <router-view />
           </td>
-          <td>
+          <td v-if="!this.isShortened">
             <a href="#" class="link-danger" v-on:click="deleteJob(job.id)">Delete</a>
           </td>
         </tr>
@@ -39,6 +39,7 @@
 import JobService from "../services/JobService";
 
 export default {
+  props : ['isShortened'],
   components: {},
   name: "EmployeeComponent",
   data() {

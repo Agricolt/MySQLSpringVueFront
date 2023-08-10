@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="mb-4 text-left">
-      <router-link to="/newEmployee" class="btn btn-secondary"
+      <router-link v-if="!this.isShortened" to="/newEmployee" class="btn btn-secondary"
         >New Employee</router-link
       >
     </div>
@@ -12,10 +12,10 @@
           <th>Employee Id</th>
           <th>Employee First Name</th>
           <th>Employee Surname</th>
-          <th>Employee Phone Number</th>
-          <th>Is a manager?</th>
-          <th>Job Name</th>
-          <th>Managing employee</th>
+          <th v-if="!this.isShortened">Employee Phone Number</th>
+          <th v-if="!this.isShortened">Is a manager?</th>
+          <th v-if="!this.isShortened">Job Name</th>
+          <th v-if="!this.isShortened">Managing employee</th>
         </tr>
       </thead>
       <tbody>
@@ -23,22 +23,24 @@
           <td>{{ employee.id }}</td>
           <td>{{ employee.firstName }}</td>
           <td>{{ employee.surname }}</td>
-          <td>{{ employee.phoneNumber }}</td>
-          <td>
+          <td v-if="!this.isShortened">{{ employee.phoneNumber }}</td>
+          <td v-if="!this.isShortened">
             <input type="checkbox" :checked="employee.isManager" disabled />
           </td>
-          <td v-if="employee.job != null">{{ employee.job.jobName}}</td>
+          <div v-if="!this.isShortened">
+          <td v-if="employee.job != null &&  !this.isShortened">{{ employee.job.jobName}}</td>
           <td v-else>None</td>
           <td v-if="employee.managingEmployee != null">{{ employee.managingEmployee.surname + ', ' +  employee.managingEmployee.firstName}}</td>
           <td v-else>None</td>
-          <td>
+          </div>
+          <td v-if="!this.isShortened">
             <router-link
               :to="{ name: 'EditEmployee', params: { id: employee.id } }"
               >View Related / Edit</router-link
             >
             <router-view />
           </td>
-          <td>
+          <td v-if="!this.isShortened">
             <a href="#" class="link-danger" v-on:click="deleteEmployee(employee.id)">Delete</a>
           </td>
         </tr>
@@ -51,6 +53,7 @@
 import EmployeeService from "../services/EmployeeService";
 
 export default {
+  props : ['isShortened'],
   components: {},
   name: "EmployeeComponent",
   data() {

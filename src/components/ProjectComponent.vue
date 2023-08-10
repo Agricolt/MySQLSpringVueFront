@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="mb-4 text-left">
-      <router-link to="/newProject" class="btn btn-secondary"
+      <router-link v-if="!this.isShortened" to="/newProject" class="btn btn-secondary"
         >New Project</router-link
       >
     </div>
@@ -43,6 +43,7 @@
 import ProjectService from "../services/ProjectService";
 
 export default {
+  props : ['isShortened'],
   components: {},
   name: "ProjectComponent",
   data() {
@@ -71,3 +72,9 @@ export default {
   },
 };
 </script>
+
+<style>
+.container {
+  margin-bottom: 200px;
+}
+</style>
